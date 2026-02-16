@@ -1,21 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "frontend/dist"
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "backend/api/index.ts" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/frontend/dist/index.html" }
-  ],
-  "env": {
-    "SUPABASE_URL": "https://vgtoydxfvyfoczhlssdc.supabase.co",
-    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZndG95ZHhmdnlmb2N6aGxzc2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExODE0NTEsImV4cCI6MjA4Njc1NzQ1MX0.hiA6BFRqPYbVekaF9vdWzeqUGr0J_pFc-vqzAPO4Yoc"
-  }
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/backend/api/index.ts" }
+  ]
 }
