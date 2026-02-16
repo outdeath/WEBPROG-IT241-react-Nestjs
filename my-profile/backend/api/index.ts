@@ -3,18 +3,27 @@ import { AppModule } from '../src/app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
-const server = express();
+const expressApp = express();
+let app: any;
 
-export const createServer = async () => {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-  app.enableCors();
-  // Ensure Nest recognizes the /api prefix from the rewrite
-  app.setGlobalPrefix('api'); 
-  await app.init();
-  return server;
-};
+async function bootstrap() {
+  if (!app) {
+    app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(expressApp),
+      { logger: ['error', 'warn'] }
+    );
+    app.enableCors({
+      origin: true,
+      credentials: true,
+    });
+    app.setGlobalPrefix('api');
+    await app.init();
+  }
+  return expressApp;
+}
 
 export default async (req: any, res: any) => {
-  await createServer();
+  const server = await bootstrap();
   server(req, res);
 };
